@@ -1,0 +1,12 @@
+build/
+app/build/
+.gradle/
+.kotlin/
+local.properties
+*.iml
+.idea/
+
+# Signature : jamais dans le dépôt.
+*.jks
+*.keystore
+keystore.properties

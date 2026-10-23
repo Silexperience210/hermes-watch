@@ -1,0 +1,7 @@
+{
+  "versionCode": 8,
+  "versionName": "0.6.1",
+  "sha256": "234acfeaa2d981dfe33bc6c4573d995003885b40907e13614e60b9908145c8f2",
+  "taille": 1233464,
+  "notes": "Nouvelle clé de signature : l'ancienne était dans le dépôt. À réinstaller une fois à la main."
+}

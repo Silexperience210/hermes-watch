@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Écran principal. Noir pur : l'écran de la montre est un AMOLED, un pixel noir est éteint (il se
+  fond dans le cadre et ne coûte rien en batterie). Rien d'important dans les coins, très arrondis.
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/racine"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000">
+
+    <!-- Batterie (bord gauche) et quota Claude (bord droit), le long des coins arrondis. -->
+    <fr.silex.hermesmontre.BordView
+        android:id="@+id/bord"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:id="@+id/principal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingStart="18dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="18dp"
+        android:paddingBottom="20dp">
+
+        <!-- ↺, l'heure et ⚙ groupés AU CENTRE, hors des coins. -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/nouvelle"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:background="@drawable/rond"
+                android:gravity="center"
+                android:text="↺"
+                android:textColor="#C8D0D8"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/etat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:fontFamily="monospace"
+                android:gravity="center"
+                android:maxLines="1"
+                android:textColor="#8492A0"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/reglages"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:background="@drawable/rond"
+                android:gravity="center"
+                android:text="⚙"
+                android:textColor="#C8D0D8"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <!-- Zone de parole : la mascotte et ses légendes. Maintenir ici pour parler.
+             La hauteur de la mascotte est choisie par EcranPrincipal selon le moment. -->
+        <LinearLayout
+            android:id="@+id/zoneParole"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <fr.silex.hermesmontre.MascotteView
+                android:id="@+id/mascotte"
+                android:layout_width="match_parent"
+                android:layout_height="150dp" />
+
+            <TextView
+                android:id="@+id/titre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:ellipsize="end"
+                android:fontFamily="monospace"
+                android:gravity="center"
+                android:maxLines="1"
+                android:autoSizeMaxTextSize="17sp"
+                android:autoSizeMinTextSize="11sp"
+                android:autoSizeTextType="uniform"
+                android:textColor="#E8EEF2"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:fontFamily="monospace"
+                android:gravity="center"
+                android:maxLines="2"
+                android:textColor="#8492A0"
+                android:textSize="13sp" />
+
+            <!-- Les étapes d'Hermes : transcription, réflexion, outils, rédaction. -->
+            <TextView
+                android:id="@+id/etapes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="monospace"
+                android:lineSpacingExtra="2dp"
+                android:paddingStart="6dp"
+                android:paddingEnd="6dp"
+                android:textColor="#8492A0"
+                android:textSize="12sp"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <!-- La réponse : toucher pour la lire en grand. -->
+        <ScrollView
+            android:id="@+id/defile"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fadingEdgeLength="20dp"
+            android:requiresFadingEdge="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/reponse"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:lineSpacingExtra="2dp"
+                android:textColor="#E8EEF2"
+                android:textSize="16sp" />
+        </ScrollView>
+
+        <!-- Raccourcis : l'historique et des questions favorites d'un toucher (réglables).
+             Une bande qui défile de côté : chaque puce garde son texte entier. -->
+        <HorizontalScrollView
+            android:id="@+id/bandeRaccourcis"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="6dp"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:id="@+id/raccourcis"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal" />
+        </HorizontalScrollView>
+
+        <TextView
+            android:id="@+id/consigne"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:fontFamily="monospace"
+            android:gravity="center"
+            android:maxLines="1"
+            android:textColor="#8492A0"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <!-- Mode cadran : après 30 s sans rien, grande heure, écran atténué. Toucher pour revenir. -->
+    <LinearLayout
+        android:id="@+id/cadran"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#000000"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <fr.silex.hermesmontre.MascotteView
+            android:id="@+id/cadranMascotte"
+            android:layout_width="match_parent"
+            android:layout_height="90dp" />
+
+        <TextView
+            android:id="@+id/cadranHeure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="monospace"
+            android:textColor="#C8D0D8"
+            android:textSize="58sp" />
+
+        <TextView
+            android:id="@+id/cadranDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="monospace"
+            android:textColor="#8492A0"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/cadranInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="monospace"
+            android:gravity="center"
+            android:textColor="#5C6874"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <!-- Lecture en grand (et historique) : la couronne ou le doigt font défiler, toucher le titre ferme. -->
+    <LinearLayout
+        android:id="@+id/lecture"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#000000"
+        android:orientation="vertical"
+        android:paddingStart="20dp"
+        android:paddingTop="14dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="18dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/lectureTitre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:fontFamily="monospace"
+            android:gravity="center"
+            android:maxLines="2"
+            android:textColor="#8492A0"
+            android:textSize="13sp" />
+
+        <ScrollView
+            android:id="@+id/lectureDefile"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:fadingEdgeLength="24dp"
+            android:requiresFadingEdge="vertical">
+
+            <LinearLayout
+                android:id="@+id/lectureContenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        </ScrollView>
+
+        <TextView
+            android:id="@+id/lectureConsigne"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:fontFamily="monospace"
+            android:gravity="center"
+            android:text="Toucher ici : retour"
+            android:textColor="#5C6874"
+            android:textSize="11sp" />
+    </LinearLayout>
+
+    <!-- Notice éphémère. -->
+    <TextView
+        android:id="@+id/notice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="52dp"
+        android:layout_marginEnd="24dp"
+        android:background="@drawable/bulle"
+        android:gravity="center"
+        android:paddingStart="12dp"
+        android:paddingTop="6dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="6dp"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        android:visibility="gone" />
+
+    <!-- Calque : question oui / non, carte, appairage, mise à jour. -->
+    <LinearLayout
+        android:id="@+id/calque"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#000000"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingStart="20dp"
+        android:paddingTop="18dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="22dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/calqueTitre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="#8492A0"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="6dp"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/calqueTexte"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="#FFFFFF"
+                android:textIsSelectable="false"
+                android:textSize="16sp" />
+        </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/calqueBoutons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/non"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_marginEnd="6dp"
+                android:layout_weight="1"
+                android:backgroundTint="#5A1E24"
+                android:text="Non"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/oui"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_marginStart="6dp"
+                android:layout_weight="1"
+                android:backgroundTint="#1E5A34"
+                android:text="Oui"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

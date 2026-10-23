@@ -1,0 +1,17 @@
+Hermes Watch
+Copyright (c) 2026 Hermes Watch contributors — MIT License (see LICENSE).
+
+This project is unofficial and is not affiliated with or endorsed by Nous Research.
+
+Third-party material:
+
+- Hermes Agent mascot ("the girl with the headphones"), from the Hermes Agent repository,
+  as distributed in the Hermes Gadget SDK (assets/mascot/nous-girl-white-1024.png).
+  MIT License, Copyright (c) 2025 Nous Research. The mascot is Nous Research's character and
+  part of their brand: it is used here only because this is a Hermes-related project.
+  Files: app/src/main/res/drawable-nodpi/mascotte_*.png, app/src/main/res/mipmap-*/ic_hermes.png
+  and the screenshots in docs/.
+
+- Hermes Gadget protocol v1 (device <-> hub), from the Hermes Gadget SDK
+  (github.com/Adolanium/hermes-gadget-sdk), MIT License. This app is an independent
+  implementation of the device side; it contains no code from the SDK.
