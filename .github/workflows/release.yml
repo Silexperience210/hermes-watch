@@ -1,10 +1,13 @@
-# Publishes a GitHub release when a version tag (v0.6.1, …) is pushed.
+# Publishes a GitHub release (and its tag, v<versionName>) whenever apk/version.json changes on
+# main — i.e. each time `tools/publish.py` output is pushed — or on demand (workflow_dispatch).
 # The attached APK is the one committed in apk/ — already signed with the real key, which never
 # leaves the owner's machine (CI only has the debug key, so it must not rebuild the release APK).
 name: release
 on:
   push:
-    tags: ["v*"]
+    branches: [main]
+    paths: ["apk/version.json"]
+  workflow_dispatch:
 permissions:
   contents: write
 jobs:
@@ -12,27 +15,29 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Check that apk/ matches the tag
+      - name: Read the version and check the APK
         run: |
           version=$(python3 -c "import json;print(json.load(open('apk/version.json'))['versionName'])")
-          test "v$version" = "$GITHUB_REF_NAME" || { echo "apk/version.json says $version, tag is $GITHUB_REF_NAME"; exit 1; }
+          echo "TAG=v$version" >> "$GITHUB_ENV"
           sha=$(sha256sum apk/hermes-montre.apk | cut -d' ' -f1)
           expected=$(python3 -c "import json;print(json.load(open('apk/version.json'))['sha256'])")
           test "$sha" = "$expected" || { echo "SHA-256 mismatch"; exit 1; }
-          cp apk/hermes-montre.apk "hermes-watch-$GITHUB_REF_NAME.apk"
+          cp apk/hermes-montre.apk "hermes-watch-v$version.apk"
           echo "SHA256=$sha" >> "$GITHUB_ENV"
           echo "NOTES=$(python3 -c "import json;print(json.load(open('apk/version.json'))['notes'])")" >> "$GITHUB_ENV"
       - uses: softprops/action-gh-release@v2
         with:
-          name: Hermes Watch ${{ github.ref_name }}
+          tag_name: ${{ env.TAG }}
+          target_commitish: ${{ github.sha }}
+          name: Hermes Watch ${{ env.TAG }}
           body: |
             ${{ env.NOTES }}
 
-            **Install:** download `hermes-watch-${{ github.ref_name }}.apk` below, open it on the watch
-            (or `adb install -r hermes-watch-${{ github.ref_name }}.apk`).
+            **Install:** download `hermes-watch-${{ env.TAG }}.apk` below, open it on the watch
+            (or `adb install -r hermes-watch-${{ env.TAG }}.apk`).
             Watches already on this signing key update themselves from the bridge.
 
             SHA-256: `${{ env.SHA256 }}`
           files: |
-            hermes-watch-${{ github.ref_name }}.apk
+            hermes-watch-${{ env.TAG }}.apk
             apk/version.json
